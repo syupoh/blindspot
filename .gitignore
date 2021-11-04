@@ -1,0 +1,25 @@
+# wandb #
+wandb/
+
+# ipynb
+
+# Pycache #
+__pycache__/
+
+# IDE setting files #
+.ipynb_checkpoints/
+.vscode/
+
+# Python files #
+tmp.py
+# config.py
+# augment.py
+
+# DIR #
+plot/
+ckpt/
+cam_image/
+
+
+
+
