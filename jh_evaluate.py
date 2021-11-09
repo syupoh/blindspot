@@ -18,6 +18,8 @@ from tqdm import tqdm, trange
 from utils import draw_graph, plot_confusion_matrix, draw_fold_graph, spot2label, label2spot, plot_prediction
 from models import adaptive_clip_grad, grad_cam
 from dataset import EGDSpotDataset, spot2label
+from numpyencoder import NumpyEncoder
+
 
 # from tqdm import tqdm
 # from utils import spot2label, label2spot, plot_confusion_matrix, plot_prediction
@@ -106,7 +108,7 @@ def get_metrics(cm, labels):
 
 def dump_json(path, data):
     with open(path, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=4, cls=NumpyEncoder)
 
 
 def evaluate(model, dataset, save_dir, cam, plot= False):
@@ -155,8 +157,24 @@ def evaluate(model, dataset, save_dir, cam, plot= False):
     metrics["Total Accuracy"] = round(acc, 4)
     metrics["Loss"] = round(loss, 4)
     # dump_json(os.path.join(save_dir, f"results.json"), metrics)
-    dump_json(os.path.join(save_dir, "results_{0:03f}.json".format(metrics["Total Accuracy"])), 
+    dump_json(os.path.join(save_dir, "results_{0:.01f}.json".format(metrics["Total Accuracy"] * 100)), 
         metrics)
+
+    pred_result = []
+    for i in range(len(files)):
+        temp = {}
+        temp['file_name'] = files[i] 
+        temp['y_true'] = (y_true[i])
+        temp['confidence'] = (confidence[i])
+        # pred_result[files[i]] = {}
+        # pred_result[files[i]]['y_true'] = (y_true[i])
+        # pred_result[files[i]]['confidence'] = (confidence[i])
+        
+        pred_result.append(temp)
+
+    # with open(path, "w") as f:
+    #     json.dump(data, f, indent=4, cls=NumpyEncoder)
+    dump_json( os.path.join(save_dir, "results_{0:.01f}_y_pred.json".format(metrics["Total Accuracy"] * 100)),  pred_result)
 
     if cam:
         idxs = np.arange(len(pred_class)) # [pred_class != y_true]
@@ -170,7 +188,7 @@ def evaluate(model, dataset, save_dir, cam, plot= False):
 
     if plot:
         plot_prediction(list(zip(dataset.x, y_true, confidence)))
-    plot_confusion_matrix(cm, target_names=labels, path=os.path.join(save_dir, "Confusion Matrix"))
+    # plot_confusion_matrix(cm, target_names=labels, path=os.path.join(save_dir, "Confusion Matrix"))
 
 def main():
     args = argparser()

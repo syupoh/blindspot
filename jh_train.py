@@ -12,7 +12,7 @@ import numpy as np
 import tensorflow as tf
 
 from jh_models import Xception
-from evaluate import evaluate, dump_json
+from jh_evaluate import evaluate, dump_json
 
 from tqdm import tqdm, trange
 from datetime import datetime

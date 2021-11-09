@@ -57,37 +57,21 @@ if [ ${gpu} -eq "0" ]
     echo
   elif [ ${gpu} -eq "1" ]
   then
-    
-    data_set='
-    d1.16
-    '
-    model_set='
-    '${root}'dataset/endoscopy/JFD-03K/ckpt/Xception/timm3/211102-1547/best_cnn_timm3_211102-154718.h5
-    '
-    # '${root}'/data/syupoh/dataset/endoscopy/JFD-03K/ckpt/Xception/timm3/211102-1547/best_cnn_timm3_211102-154718.h5
-    
-    
-    ## new version
-    for dataname in ${data_set}
-    do
-      val_data=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/${dataname}
-      for model_path in ${model_set}
-      do
+  
+    python jh_train.py --gpu=${gpu} \
+      --train_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/d1.16_1 \
+      --save_path=${root}/dataset/endoscopy/JFD-03K/ckpt/Xception/ -cv
+      
+    python jh_train.py --gpu=${gpu} \
+      --train_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/d1.17 \
+      --save_path=${root}/dataset/endoscopy/JFD-03K/ckpt/Xception/ -cv
 
-        python jh_evaluate.py --gpu=${gpu} --scale  \
-          --val_data=${val_data} \
-          --save_dir=${root}/dataset/endoscopy/JFD-03K/grad_cam/ \
-          --ckpt_path=${model_path} --cam
-      done
-    done
+      # --val_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/timm3/validation 
 
     
 
+    
 
-    # python jh_train.py --gpu=${gpu} \
-    #   --train_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/timm3/train \
-    #   --val_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/timm3/validation \
-    #   --save_path=${root}/dataset/endoscopy/JFD-03K/ckpt/Xception/ -cv
 
 #########################
     echo
@@ -98,12 +82,14 @@ if [ ${gpu} -eq "0" ]
     video_LSS_10
     video_MSN_09
     video_YSK_11
+    video_LSJ_10
     '
     model_set='
-    '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/_prev/fold_1_*.h5
+    '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/d1.17/211108_1407/best_cnn_d1.17_211108_1407.h5
     '
 
     
+    # '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/_prev/fold_1_*.h5
     # '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/timm3/211102-1547/*_cnn_timm3_211102-154718.h5
     ## new version
     for dataname in ${data_set}
@@ -115,7 +101,7 @@ if [ ${gpu} -eq "0" ]
         python jh_evaluate.py --gpu=${gpu} --scale  \
           --val_data=${val_data} \
           --save_dir=${root}/dataset/endoscopy/JFD-03K/grad_cam/ \
-          --ckpt_path=${model_path} 
+          --ckpt_path=${model_path} --cam
       done
     done
     # dataname='video_LEESANGSOON_10'
@@ -136,11 +122,45 @@ if [ ${gpu} -eq "0" ]
     echo
   elif [ ${gpu} -eq "3" ]
   then
-    python jh_train.py --gpu=${gpu} \
-      --train_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/d1.16_1 \
-      --save_path=${root}/dataset/endoscopy/JFD-03K/ckpt/Xception/ -cv
-      # --val_path=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/timm3/validation \
 
+
+    data_set='
+    video_LSS_10
+    video_MSN_09
+    video_YSK_11
+    video_LSJ_10
+    '
+    model_set='
+    '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/_prev/best_cnn_20210830-164755.h5
+    '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/timm3/211102_1730/best_cnn_timm3_211102_1730.h5
+    '${root}'/dataset/endoscopy/JFD-03K/ckpt/Xception/d1.17/211108_1407/best_cnn_d1.17_211108_1407.h5
+    '
+    for dataname in ${data_set}
+    do
+      val_data=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/${dataname}
+      for model_path in ${model_set}
+      do
+
+        python jh_evaluate.py --gpu=${gpu} --scale  \
+          --val_data=${val_data} \
+          --save_dir=${root}/dataset/endoscopy/JFD-03K/grad_cam/ \
+          --ckpt_path=${model_path} 
+      done
+    done
+
+    for dataname in ${data_set}
+    do
+      val_data=${root}/dataset/endoscopy/JFD-03K/jfd_dataset/${dataname}
+      for model_path in ${model_set}
+      do
+
+        python jh_evaluate.py --gpu=${gpu} --scale  \
+          --val_data=${val_data} \
+          --save_dir=${root}/dataset/endoscopy/JFD-03K/grad_cam/ \
+          --ckpt_path=${model_path} --cam
+      done
+    done
+    
 
 
 

@@ -34,9 +34,9 @@ def load_image(fpath, image_shape, scale_flag):
 def get_data(root_path):
     X, y = [], []
     lower_spot2label = {}
-    for k, v in spot2label.iteritems():
+    for k, v in spot2label.items():
         lower_spot2label[k.lower()] = v
-        
+
     if os.path.splitext(root_path)[-1] != ".txt":
         for path, dirs, files in os.walk(root_path):
             if not dirs:

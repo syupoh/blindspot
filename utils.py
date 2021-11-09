@@ -79,7 +79,7 @@ def draw_fold_graph(dl_accs, save_path):
     plt.ylim(ylim)
     plt.yticks(fontsize=fontsize)
     plt.title('Validation Accuracy', fontsize=fontsize)
-    plt.show()
+    # plt.show()
     fig.savefig(save_path)
     plt.close()
 
@@ -95,7 +95,8 @@ def draw_graph(history, save_path):
     xticks = [f"{i+1}" for i in range(len(acc))]
     ylim = [0.2, 1]
 
-    plt.figure(figsize=(12, 6))
+    # plt.figure(figsize=(12, 6))
+    plt.figure()
     
     plt.subplot(1, 2, 1)
     plt.plot(acc, label='Training Accuracy')
@@ -131,7 +132,14 @@ def plot_confusion_matrix(cm, target_names=None, cmap=None, normalize=True, labe
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         
-    plt.figure(figsize=(12, 8))
+    
+# qt.qpa.screen: QXcbConnection: Could not connect to display localhost:11.0
+# Could not connect to any X display.
+
+    # print('plot????')
+    plt.figure()
+    # plt.figure(figsize=(12, 8))
+    # print('plot?')
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(os.path.basename(path))
     plt.colorbar()
